@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-tracing-app
+  namespace: observability
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
+spec:
+  selector:
+    matchLabels:
+      app: my-tracing-app
+  template:
+    metadata:
+      labels:
+        app: my-tracing-app
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: my-tracing-app
+        image: jaegertracing/vertx-create-span:operator-e2e-tests
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: JAEGER_SERVICE_NAME
+          value: myapp
+        - name: JAEGER_AGENT_HOST
+          value: localhost  # default
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        - name: JAEGER_ENDPOINT
+          #value: http://jaeger:14268/api/traces
+          value: http://10.96.72.180:14268/api/traces
+        resources:
+          limits:
+            memory: 500M
+            cpu: 250m
+          requests:
+            memory: 500M
+            cpu: 250m
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-tracing-app
+  namespace: observability
+  labels:
+    run: my-tracing-app
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    run: my-tracing-app
