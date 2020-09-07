@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  creationTimestamp: "2020-04-23T09:06:32Z"
+  generation: 11
+  labels:
+    app.kubernetes.io/name: web
+  name: hotrodweb
+  namespace: tracing2
+  resourceVersion: "992838"
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: hotrodweb-svc
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+      creationTimestamp: null
+      labels:
+        app: hotrodweb-svc
+    spec:
+      containers:
+      - name: myapp
+        image: jaegertracing/example-hotrod
+        ports:
+        - containerPort: 8080
+        env:
+        - name: JAEGER_SERVICE_NAME
+          value: myapp
+        - name: JAEGER_AGENT_HOST
+          value: localhost  # default
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        - name: JAEGER_ENDPOINT
+          #value: http://jaeger:14268/api/traces
+          value: http://10.99.41.35:14268/api/traces
+        resources:
+          limits:
+            memory: 500M
+            cpu: 250m
+          requests:
+            memory: 500M
+            cpu: 250m
+
+      - name: jaeger-agent
+        image: jaegertracing/jaeger-agent:1.18
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        args:
+        - --reporter.grpc.host-port=dns:///simplest-collector-headless.$(POD_NAMESPACE).svc.cluster.local:14250
+        ports:
+        - containerPort: 6831
+          name: jg-compact-trft
+          protocol: UDP
+        resources:
+          limits:
+            memory: 50M
+            cpu: 100m
+          requests:
+            memory: 50M
+            cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotrodweb-svc
+  namespace: tracing2
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: hotrodweb-svc
+  type: NodePort
+
