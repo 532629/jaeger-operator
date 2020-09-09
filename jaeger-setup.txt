@@ -466,14 +466,24 @@ telnet simplest-jaeger-collector-headless.observability.svc.cluster.local 14250
     
 https://medium.com/opentracing/take-opentracing-for-a-hotrod-ride-f6e3141f7941
 Take OpenTracing for a HotROD rideUpdate (21 March 2019): my book Mastering Distributed Tracing has a newer version of this tutorial.medium.com
-
-
-
-
-
-
-
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+# CPU/Memory Utilization
+root@automationmaster1:/home/ubuntu/prometheus-operator-thanos/thanos# kubectl get pods -n tracing
+NAME                                    READY   STATUS    RESTARTS   AGE
+helm-jaeger-operator-554467bd7b-6ggww   1/1     Running   0          5d3h
+hotrodweb-65bb8ddf89-27dgl              2/2     Running   0          5d3h
+simplest-5d674b68b8-stgnb               1/1     Running   0          5d3h
+
+root@automationmaster1:/home/ubuntu/prometheus-operator-thanos/thanos# kubectl top pods -n tracing
+NAME                                    CPU(cores)   MEMORY(bytes)
+helm-jaeger-operator-554467bd7b-6ggww   2m           15Mi
+hotrodweb-65bb8ddf89-27dgl              1m           8Mi
+simplest-5d674b68b8-stgnb               1m           18Mi
+root@automationmaster1:/home/ubuntu/prometheus-operator-thanos/thanos#
+
+--------------------------------------------------------
+                                        4m          41Mi
 
 
 
