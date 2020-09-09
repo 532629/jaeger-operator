@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.opencensus.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.opencensus.name }}
+    component: {{ .Values.opencensus.component }}
+spec:
+  replicas: {{ .Values.opencensus.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.opencensus.name }}
+      component: {{ .Values.opencensus.component }}
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: {{  .Values.opencensus.name  }}
+        component: {{ .Values.opencensus.component }}
+    spec:
+      containers:
+      - command:
+        - "/occollector_linux"
+        - "--config=/conf/oc-collector-config.yaml"
+        env:
+        - name: GOGC
+          value: "80"
+        image: "{{ .Values.opencensus.image.repository }}:{{ .Values.opencensus.image.tag }}"
+        imagePullPolicy: {{ .Values.opencensus.image.pullPolicy }}
+        name: {{ .Values.opencensus.component }}
+        ports:
+          - name: port1
+            containerPort: {{ .Values.opencensus.containerport1 }} 
+            protocol: TCP
+          - name: port2
+            containerPort: {{ .Values.opencensus.containerport2 }} 
+            protocol: TCP  
+        volumeMounts:
+        - name: oc-collector-config-vol
+          mountPath: /conf
+                    
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.opencensus.livenessprobeport }} 
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.opencensus.readinessprobeport }} 
+        resources: 
+{{ toYaml .Values.jaeger.resources | indent 12 }}
+      volumes:
+      - configMap:
+          name: oc-collector-conf
+          items:
+          - key: oc-collector-config
+            path: oc-collector-config.yaml
+        name: oc-collector-config-vol  

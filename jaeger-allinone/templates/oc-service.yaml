@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.opencensus.service.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.opencensus.name }}
+    component: {{ .Values.opencensus.component }} 
+spec:
+  type: {{ .Values.opencensus.service.type }}
+  ports:
+  - name : {{ .Values.opencensus.service.ports.opencensus.name }}
+    port: {{ .Values.opencensus.service.ports.opencensus.port }}
+    targetPort: {{ .Values.opencensus.service.ports.opencensus.targetPort }}
+    protocol: {{ .Values.opencensus.service.ports.opencensus.protocol }}
+  selector:
+    component: {{ .Values.opencensus.component }}
+    

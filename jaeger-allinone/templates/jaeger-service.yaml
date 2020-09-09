@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.jaeger.service.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.jaeger.name}} 
+spec:
+  type: {{ .Values.jaeger.service.type }}
+  ports:
+  - name : {{ .Values.jaeger.service.ports.collection.name }}
+    port: {{ .Values.jaeger.service.ports.collection.port }}
+    targetPort: {{ .Values.jaeger.service.ports.collection.targetPort }}
+    protocol: {{ .Values.jaeger.service.ports.collection.protocol }}
+  selector:
+    app: {{ .Values.jaeger.name }}
+    

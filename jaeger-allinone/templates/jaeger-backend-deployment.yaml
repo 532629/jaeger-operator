@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.jaeger.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.jaeger.name }}
+spec:
+  replicas: {{ .Values.jaeger.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.jaeger.name }}
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: {{ .Values.jaeger.annotations.enabled }}
+      labels:
+        app: {{ .Values.jaeger.name }}
+    spec:
+      dnsPolicy: {{ .Values.jaeger.dnsPolicy }}
+      containers:
+      - name: {{ .Values.jaeger.name }}
+        image: {{ .Values.jaeger.image.repository }}:{{ .Values.jaeger.image.tag }}
+        #mage: jaegertracing/all-in-one:1.8
+        imagePullPolicy: {{ .Values.jaeger.image.pullPolicy }}
+        ports:
+        - name: collection
+          containerPort: {{ .Values.jaeger.containerport1 }} 
+          protocol: TCP
+        - name: ui
+          containerPort: {{ .Values.jaeger.containerport2 }} 
+          protocol: TCP 
+        resources:
+{{ toYaml .Values.jaeger.resources | indent 12 }}
+            
+         
+            
+  
