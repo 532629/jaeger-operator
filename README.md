@@ -7,7 +7,7 @@ This repository contains -
 3. Sample application (integrated with Jaeger agent)
 
 # References
-    http://jaegerui.hcldevopscoe.com/
+    http://jaegerui.<>.com/
     https://github.com/jaegertracing/jaeger/blob/0a889e8ea7ca887f30eaa814456d86ad97be3f8e/examples/hotrod/services/customer/database.go
 
     http://linkerd.<>.com/namespaces/emojivoto/deployments/voting
