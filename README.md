@@ -10,8 +10,8 @@ This repository contains -
     http://jaegerui.hcldevopscoe.com/
     https://github.com/jaegertracing/jaeger/blob/0a889e8ea7ca887f30eaa814456d86ad97be3f8e/examples/hotrod/services/customer/database.go
 
-    http://linkerd.hcldevopscoe.com/namespaces/emojivoto/deployments/voting
-    http://linkerd.hcldevopscoe.com/grafana/d/linkerd-pod/linkerd-pod?orgId=1&refresh=1m
-    http://emojivoto.hcldevopscoe.com/
+    http://linkerd.<>.com/namespaces/emojivoto/deployments/voting
+    http://linkerd.<>.com/grafana/d/linkerd-pod/linkerd-pod?orgId=1&refresh=1m
+    http://emojivoto.<>.com/
     https://medium.com/opentracing/take-opentracing-for-a-hotrod-ride-f6e3141f7941
 
