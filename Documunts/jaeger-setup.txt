@@ -2,7 +2,7 @@ curl  http://www.google.com
 
 First try with Helm chart
 --------------------------
-root@devopslab:/home/ubuntu# helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
+root@devopslab:/home/ubuntu# helm repo add jaegertracing https://jaegertracing.github.io/helm-xxxx
 "jaegertracing" has been added to your repositories
 root@devopslab:/home/ubuntu#
 
